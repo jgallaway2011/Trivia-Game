@@ -73,14 +73,16 @@ function decrementBreakTime() {
         if (questionIndex <= beerQuestions.length - 1) {
             questionTimer();
             for (var i = 1; i < 5; i++) {
+                var answerButtonDiv = $("<div>")
                 // Assign new button element to variable crystalButton
                 var answerButton = $("<button>");
                     // Assign class, id, and value to each crystalButton
                     answerButton.attr({
-                        "class": "answerButton",
+                        "class": "answerButton btn btn-block",
                         "id": "option" + i,
                     });
-                $(".answerButtons").append(answerButton);
+                answerButtonDiv.append(answerButton);
+                $(".answerButtons").append(answerButtonDiv);
             } 
             $("#beerQuestion").text(beerQuestions[questionIndex].question);
             $("#option1").text(beerQuestions[questionIndex].option1);
@@ -117,7 +119,7 @@ function gameReset() {
         $("#beerQuestion").text("All done, here's how you did!");
         $("#questionTime").empty();
         $(".answerButtons").append("<p>Correct Answers: " + correctAnswers + "</p>");
-        $(".answerButtons").append("<p>Inorrect Answers: " + incorrectAnswers + "</p>");
+        $(".answerButtons").append("<p>Incorrect Answers: " + incorrectAnswers + "</p>");
         $(".answerButtons").append("<p>Unanswered: " + unanswered + "</p>");
         $("#start").show();
     }
@@ -139,14 +141,16 @@ $(document).ready(function() {
         questionIndex = 0;
         questionTimer();
         for (var i = 1; i < 5; i++) {
+            var answerButtonDiv = $("<div>")
             // Assign new button element to variable crystalButton
             var answerButton = $("<button>");
                 // Assign class, id, and value to each crystalButton
                 answerButton.attr({
-                    "class": "answerButton",
+                    "class": "answerButton btn btn-block",
                     "id": "option" + i,
                 });
-            $(".answerButtons").append(answerButton);
+            answerButtonDiv.append(answerButton);
+            $(".answerButtons").append(answerButtonDiv);
         }
         $("#beerQuestion").text(beerQuestions[questionIndex].question);
         $("#option1").text(beerQuestions[questionIndex].option1);
