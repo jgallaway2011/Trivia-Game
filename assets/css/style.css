@@ -8,32 +8,24 @@ body {
 
 h1 {
     text-align: center;
-    margin: 50px 0px 50px 200px;
     font-family: 'Shrikhand', cursive;
 }
 
 .answerButton {
     margin: 0px 10px 10px;
-    /* background: none; */
+    background: goldenrod;
 }
 
 .answerButton:hover {
-    border: 1px solid grey;
+    border: 5px solid grey;
 }
 
 #mainContent {
     margin-top: 50px;
 }
 
-#questionTime {
-    font-size: 30px;
-    text-emphasis: bold;
-}
-
+#questionTime,
 #beerQuestion {
     font-size: 30px;
     text-emphasis: bold;
 }
-
-
-
