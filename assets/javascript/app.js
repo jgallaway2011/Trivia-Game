@@ -13,7 +13,7 @@ var questionIndex = 0;
 
 var questionTime = 30;
 
-var breakTime = 4;
+var breakTime = 3;
 
 var beerQuestions = [{
     "question": "Where and when was the earliest instance of beer found?",
@@ -42,13 +42,12 @@ var beerQuestions = [{
 // ***********************************************************************************************************************
 
 function questionTimer() {
-    $("#questionTime").text("Time Remaining: " + questionTime + " seconds" );
     intervalId = setInterval(decrementQuestionTime, 1000);
 }
 
 function decrementQuestionTime() {
     questionTime--;
-    $("#questionTime").text("Time Remaining: " + questionTime + " seconds" );
+    $("#questionTime").text("Time Remaining: " + questionTime + " seconds");
     if (questionTime === 0) {
         stop();
         $("#beerQuestion").text("Out of Time!");
@@ -68,51 +67,57 @@ function decrementBreakTime() {
     if (breakTime === 0) {
         stop();
         questionTime = 30;
-        breakTime = 4;
+        breakTime = 3;
+        $("#questionTime").text("Time Remaining: " + questionTime + " seconds");
         $(".answerButtons").empty();
         if (questionIndex <= beerQuestions.length - 1) {
             questionTimer();
-            for (var i = 1; i < 5; i++) {
-                var answerButtonDiv = $("<div>")
-                // Assign new button element to variable crystalButton
-                var answerButton = $("<button>");
-                    // Assign class, id, and value to each crystalButton
-                    answerButton.attr({
-                        "class": "answerButton btn btn-block",
-                        "id": "option" + i,
-                    });
-                answerButtonDiv.append(answerButton);
-                $(".answerButtons").append(answerButtonDiv);
-            } 
-            $("#beerQuestion").text(beerQuestions[questionIndex].question);
-            $("#option1").text(beerQuestions[questionIndex].option1);
-            $("#option2").text(beerQuestions[questionIndex].option2);
-            $("#option3").text(beerQuestions[questionIndex].option3);
-            $("#option4").text(beerQuestions[questionIndex].option4);
-
-            $(".answerButton").click(function() {
-                stop();
-                var answerValue = $(this).text();
-    
-                if (answerValue === beerQuestions[questionIndex].answer) {
-                    $("#beerQuestion").text("Correct!");
-                    $(".answerButtons").empty();
-                    questionIndex++;
-                    correctAnswers++;
-                    questionBreakTime();
-                
-                } else {
-                    $("#beerQuestion").text("Nope!");
-                    $(".answerButtons").text("The Correct Answer was: " + beerQuestions[questionIndex].answer)
-                    questionIndex++;
-                    incorrectAnswers++;
-                    questionBreakTime();
-                }
-            });
+            createAnswerDiv();
         } else if (questionIndex > beerQuestions.length - 1) {
             gameReset();
         }
     }
+}
+
+function createAnswerDiv() {
+    for (var i = 1; i < 5; i++) {
+        var answerButtonDiv = $("<div>")
+        // Assign new button element to variable answerButton
+        var answerButton = $("<button>");
+            // Assign class, id, and value to each answerButton
+            answerButton.attr({
+                "class": "answerButton btn btn-block",
+                "id": "option" + i,
+            });
+        answerButtonDiv.append(answerButton);
+        $(".answerButtons").append(answerButtonDiv);
+    }
+    $("#beerQuestion").text(beerQuestions[questionIndex].question);
+    $("#option1").text(beerQuestions[questionIndex].option1);
+    $("#option2").text(beerQuestions[questionIndex].option2);
+    $("#option3").text(beerQuestions[questionIndex].option3);
+    $("#option4").text(beerQuestions[questionIndex].option4);
+}
+
+function stop() {
+    clearInterval(intervalId);
+}
+
+function checkUserAnswer() {
+    stop();
+    var userAnswer = $(this).text();
+
+    if (userAnswer === beerQuestions[questionIndex].answer) {
+        $("#beerQuestion").text("Correct!");
+        $(".answerButtons").empty();
+        correctAnswers++;
+    } else {
+        $("#beerQuestion").text("Nope!");
+        $(".answerButtons").text("The Correct Answer was: " + beerQuestions[questionIndex].answer)
+        incorrectAnswers++;
+    }
+    questionIndex++;
+    questionBreakTime();
 }
 
 function gameReset() {
@@ -123,10 +128,6 @@ function gameReset() {
         $(".answerButtons").append("<p>Unanswered: " + unanswered + "</p>");
         $("#start").show();
     }
-
-function stop() {
-    clearInterval(intervalId);
-  }
 
 // MAIN PROCESS
 //************************************************************************************************************************
@@ -139,44 +140,11 @@ $(document).ready(function() {
         incorrectAnswers = 0;
         unanswered = 0;
         questionIndex = 0;
+        $("#questionTime").text("Time Remaining: " + questionTime + " seconds");
         questionTimer();
-        for (var i = 1; i < 5; i++) {
-            var answerButtonDiv = $("<div>")
-            // Assign new button element to variable crystalButton
-            var answerButton = $("<button>");
-                // Assign class, id, and value to each crystalButton
-                answerButton.attr({
-                    "class": "answerButton btn btn-block",
-                    "id": "option" + i,
-                });
-            answerButtonDiv.append(answerButton);
-            $(".answerButtons").append(answerButtonDiv);
-        }
-        $("#beerQuestion").text(beerQuestions[questionIndex].question);
-        $("#option1").text(beerQuestions[questionIndex].option1);
-        $("#option2").text(beerQuestions[questionIndex].option2);
-        $("#option3").text(beerQuestions[questionIndex].option3);
-        $("#option4").text(beerQuestions[questionIndex].option4);
-
-        $(".answerButton").click(function() {
-            stop();
-            var answerValue = $(this).text();
-
-            if (answerValue === beerQuestions[questionIndex].answer) {
-                $("#beerQuestion").text("Correct!");
-                $(".answerButtons").empty();
-                questionIndex++;
-                correctAnswers++;
-                questionBreakTime();
-            
-            } else {
-                $("#beerQuestion").text("Nope!");
-                $(".answerButtons").text("The Correct Answer was: " + beerQuestions[questionIndex].answer)
-                questionIndex++;
-                incorrectAnswers++;
-                questionBreakTime();
-            }
-        });
+        createAnswerDiv();
     });
 
+    // Run the checkUserAnswer function when someone clicks on one of the answer choices
+    $(document).on("click", ".answerButton", checkUserAnswer);
 });
